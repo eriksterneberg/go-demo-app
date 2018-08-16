@@ -17,6 +17,7 @@ services:
 #    image: golang:1.10.3
     restart: always
     volumes:
+      - "/Users/eriksterneberg/workspace/go/src/github.com/eriksterneberg/go-demo-app/events-service/src:/go/src/github.com/eriksterneberg/go-demo-app/events-service/src"
       - "./events-service/src/:/src"
     ports:
       - "80:8080"

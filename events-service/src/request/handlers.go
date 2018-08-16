@@ -78,7 +78,6 @@ func AllEventHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	w.Header().Set("Content-Type", "application/json;charset=utf8")
 
-	logging.Debug("Returning:")
 	logging.Debug(events)
 	json.NewEncoder(w).Encode(&events)
 }
