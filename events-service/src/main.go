@@ -2,9 +2,11 @@ package main
 
 import (
 	"net/http"
-	"playground/demo-app/events-service/src/logging"
+	//"./logging"
+	"github.com/eriksterneberg/go-demo-app/events-service/src/logging"
 
-	"playground/demo-app/events-service/src/request"
+	//"./request"
+	"github.com/eriksterneberg/go-demo-app/events-service/src/request"
 
 	"github.com/gorilla/mux"
 )

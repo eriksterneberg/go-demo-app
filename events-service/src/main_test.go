@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"playground/demo-app/events-service/src/db"
+	"github.com/eriksterneberg/go-demo-app/events-service/src/db"
 	"strings"
 	"testing"
 
@@ -78,18 +78,18 @@ func TestGetAllEvents(t *testing.T) {
 
 }
 
-func TestGetEventByName(t *testing.T) {
-	event := mustCreateEvent()
-
-	url := fmt.Sprintf("/events/name/%s", event.Name)
-	req, _ := http.NewRequest("GET", url, nil)
-	response := executeRequest(req)
-	checkResponseCode(t, http.StatusOK, response.Code)
-
-	events := []db.
-
-}
-
-func TestGetEvent(t *testing.T) {
-
-}
+//func TestGetEventByName(t *testing.T) {
+//	event := mustCreateEvent()
+//
+//	url := fmt.Sprintf("/events/name/%s", event.Name)
+//	req, _ := http.NewRequest("GET", url, nil)
+//	response := executeRequest(req)
+//	checkResponseCode(t, http.StatusOK, response.Code)
+//
+//	events := []db.
+//
+//}
+//
+//func TestGetEvent(t *testing.T) {
+//
+//}

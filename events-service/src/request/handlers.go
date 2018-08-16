@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"playground/demo-app/events-service/src/db"
-	"playground/demo-app/events-service/src/logging"
+	//"../db"
+	"github.com/eriksterneberg/go-demo-app/events-service/src/db"
+	//"../logging"
+	"github.com/eriksterneberg/go-demo-app/events-service/src/logging"
 
 	"encoding/hex"
 

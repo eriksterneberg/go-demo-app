@@ -1,0 +1,43 @@
+####################################################################
+#
+# These are development settings for the project. To deploy the
+# project to production you will need to write another file for
+# `docker stack deploy`
+#
+####################################################################
+
+version: '3.5'
+
+services:
+  events-service:
+    restart: always
+    build: ./events-service/
+    ports:
+      - "80:8080"
+    networks:
+      - frontend-tier
+      - events-data-tier
+    environment:
+      - LOG=DEBUG
+      - MONGO=mongodb://events-db:27017
+    command: './app'
+
+  events-db:
+    image: mongo:3.3
+    container_name: events-db
+    ports:
+      - "27017:27017"
+    volumes:
+       - db-data:/data/db
+    networks:
+      - events-data-tier
+
+volumes:
+  db-data:
+
+networks:
+  frontend-tier:
+    driver: bridge
+  events-data-tier:
+    driver: bridge
+
