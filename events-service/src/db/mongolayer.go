@@ -80,10 +80,10 @@ func (mongolayer *MongoDBLayer) FindAllAvailableEvents() ([]Event, error) {
 	return events, err
 }
 
-func (mongolayer *MongoDBLayer) DeleteEvent(id []byte) error {
+func (mongolayer *MongoDBLayer) DeleteEvent(event Event) error {
 	session := mongolayer.getSession()
 	defer session.Close()
 
-	err := session.DB(Config.DB).C(Config.EVENTS).Remove(bson.ObjectId(id))
+	err := session.DB(Config.DB).C(Config.EVENTS).RemoveId(event.ID)
 	return err
 }

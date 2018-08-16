@@ -6,8 +6,6 @@ RUN mkdir -p /src/
 WORKDIR /src/
 COPY src/. .
 RUN go get -d -v
-# RUN apt-get update
-# RUN apt-get install librdkafka-dev --yes
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
 FROM alpine:latest

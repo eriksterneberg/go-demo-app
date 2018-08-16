@@ -1,16 +1,15 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"github.com/eriksterneberg/go-demo-app/events-service/src/db"
-	"strings"
 	"testing"
 
 	"gopkg.in/mgo.v2/bson"
+	"encoding/json"
+	"strings"
 )
 
 func checkResponseCode(t *testing.T, expected, actual int) {
@@ -42,8 +41,7 @@ func mustCreateEvent() db.Event {
 		log.Panicf("Encountered error initializing test data: %v", err)
 	}
 
-	// Clean up
-	defer dbhandler.DeleteEvent(id)
+
 
 	event.ID = bson.ObjectId(id)
 
@@ -62,7 +60,7 @@ func TestGetAllEventsEmpty(t *testing.T) {
 }
 
 func TestGetAllEvents(t *testing.T) {
-	mustCreateEvent()
+	event := mustCreateEvent()
 
 	req, _ := http.NewRequest("GET", "/events", nil)
 	response := executeRequest(req)
@@ -70,12 +68,18 @@ func TestGetAllEvents(t *testing.T) {
 
 	events := []db.Event{}
 	json.NewDecoder(response.Body).Decode(&events)
-	fmt.Println(events)
+
+	dbhandler := db.DatabaseHandlerFactory()
+	err := dbhandler.DeleteEvent(event)
+
+	if err != nil {
+		msg := "Encountered an error when trying to delete from db: %v"
+		log.Fatalf(msg, err)
+	}
 
 	if length := len(events); length != 1 {
 		t.Errorf("GET /events got %d events but expected 1.", length)
 	}
-
 }
 
 //func TestGetEventByName(t *testing.T) {
