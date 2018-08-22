@@ -10,7 +10,7 @@ down:
 
 test:
 	@ echo "Running tests for events-service"
-	docker-compose --file docker-compose-test.yml exec events-service go test
+	docker-compose --file docker-compose-test.yml exec events-service go test ./...
 
 testd:
 	make up

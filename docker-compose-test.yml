@@ -11,13 +11,13 @@ version: '3.5'
 services:
   events-service:
     build:
-      dockerfile: Dockerfile-test
+      dockerfile: Dockerfile.test
       context: ./events-service/
     container_name: events
-#    image: golang:1.10.3
     restart: always
     volumes:
-      - "/Users/eriksterneberg/workspace/go/src/github.com/eriksterneberg/go-demo-app/events-service/src:/go/src/github.com/eriksterneberg/go-demo-app/events-service/src"
+#      - "/Users/eriksterneberg/workspace/go/src/github.com/eriksterneberg/go-demo-app/events-service/src:/go/src/github.com/eriksterneberg/go-demo-app/events-service/src"
+      - "./events-service/src:/go/src/github.com/eriksterneberg/go-demo-app/events-service/src"
       - "./events-service/src/:/src"
     ports:
       - "80:8080"
@@ -25,9 +25,7 @@ services:
       - frontend-tier
       - events-data-tier
     environment:
-      - LOG=DEBUG
       - MONGO=mongodb://events-db:27017
-    command: 'ping 127.0.0.1'
 
   events-db: # Don't use volume for db, then no need to tear down
     image: mongo:3.3
@@ -36,9 +34,6 @@ services:
       - "27017:27017"
     networks:
       - events-data-tier
-
-#volumes:
-#  events-src:
 
 networks:
   frontend-tier:

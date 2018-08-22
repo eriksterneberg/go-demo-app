@@ -34,12 +34,12 @@ func NewMongoDBLayer(connection string) (*MongoDBLayer, error) {
 	return &MongoDBLayer{session: s}, err
 }
 
-func (mongolayer *MongoDBLayer) getSession() *mgo.Session {
-	return mongolayer.session.Copy()
+func (m *MongoDBLayer) getSession() *mgo.Session {
+	return m.session.Copy()
 }
 
-func (mongolayer MongoDBLayer) AddEvent(e Event) ([]byte, error) {
-	session := mongolayer.getSession()
+func (m MongoDBLayer) AddEvent(e Event) ([]byte, error) {
+	session := m.getSession()
 	defer session.Close()
 
 	if !e.ID.Valid() {
@@ -53,8 +53,8 @@ func (mongolayer MongoDBLayer) AddEvent(e Event) ([]byte, error) {
 	return []byte(e.ID), session.DB(Config.DB).C(Config.EVENTS).Insert(e)
 }
 
-func (mongolayer *MongoDBLayer) FindEvent(id []byte) (Event, error) {
-	session := mongolayer.getSession()
+func (m *MongoDBLayer) FindEvent(id []byte) (Event, error) {
+	session := m.getSession()
 	defer session.Close()
 
 	event := Event{}
@@ -62,8 +62,8 @@ func (mongolayer *MongoDBLayer) FindEvent(id []byte) (Event, error) {
 	return event, err
 }
 
-func (mongolayer *MongoDBLayer) FindEventByName(name string) (Event, error) {
-	session := mongolayer.getSession()
+func (m *MongoDBLayer) FindEventByName(name string) (Event, error) {
+	session := m.getSession()
 	defer session.Close()
 
 	event := Event{}
@@ -71,8 +71,8 @@ func (mongolayer *MongoDBLayer) FindEventByName(name string) (Event, error) {
 	return event, err
 }
 
-func (mongolayer *MongoDBLayer) FindAllAvailableEvents() ([]Event, error) {
-	session := mongolayer.getSession()
+func (m *MongoDBLayer) FindAllAvailableEvents() ([]Event, error) {
+	session := m.getSession()
 	defer session.Close()
 
 	events := []Event{}
@@ -80,10 +80,10 @@ func (mongolayer *MongoDBLayer) FindAllAvailableEvents() ([]Event, error) {
 	return events, err
 }
 
-func (mongolayer *MongoDBLayer) DeleteEvent(event Event) error {
-	session := mongolayer.getSession()
+func (m *MongoDBLayer) DeleteEvent(e Event) error {
+	session := m.getSession()
 	defer session.Close()
 
-	err := session.DB(Config.DB).C(Config.EVENTS).RemoveId(event.ID)
+	err := session.DB(Config.DB).C(Config.EVENTS).RemoveId(e.ID)
 	return err
 }

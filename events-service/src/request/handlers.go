@@ -4,18 +4,20 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	//"../db"
 	"github.com/eriksterneberg/go-demo-app/events-service/src/db"
-	//"../logging"
 	"github.com/eriksterneberg/go-demo-app/events-service/src/logging"
-
 	"encoding/hex"
-
 	"github.com/gorilla/mux"
 )
 
+// HTTP handler finding a single event
+// Tests to add:
+// 400 - no SearchCriteria
+// 400 - no `search`
+// 400 - SearchCriteria not `name` or `id`
+// 500 - Internal error should be handled
 func FindEventHandler(w http.ResponseWriter, r *http.Request) {
-	logging.Info("FindEventHandler called")
+	logging.Debug("FindEventHandler called")
 
 	variables := mux.Vars(r)
 	criteria, ok := variables["SearchCriteria"]
@@ -60,11 +62,12 @@ func FindEventHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(event)
 }
 
-/*
- *  Returns a list of all events in the database
- */
+
+// HTTP handler for getting all events in database
+// Tests to add:
+// 500 - internal error should be handled
 func AllEventHandler(w http.ResponseWriter, r *http.Request) {
-	logging.Info("AllEventHandler called")
+	logging.Debug("AllEventHandler called")
 
 	dbhandler := db.DatabaseHandlerFactory()
 	events, err := dbhandler.FindAllAvailableEvents()
@@ -73,6 +76,7 @@ func AllEventHandler(w http.ResponseWriter, r *http.Request) {
 		logging.Error("Encountered error in AllEventHandler:", err)
 		w.WriteHeader(500)
 		fmt.Fprint(w, `{"errors": "Unknown error occured"}`)
+		return
 	}
 
 	w.WriteHeader(200)
@@ -82,11 +86,13 @@ func AllEventHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&events)
 }
 
-/*
- *  Creates event in database
- */
+// HTTP handler for creating an event
+// Tests to add
+// 200 - create an event
+// 400 - incorrect format
+// 500 - internal error should be handled
 func CreateEvent(w http.ResponseWriter, r *http.Request) {
-	logging.Info("CreateEvent called")
+	logging.Debug("CreateEvent called")
 
 	event := db.Event{}
 	err := json.NewDecoder(r.Body).Decode(&event)

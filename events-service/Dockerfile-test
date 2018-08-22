@@ -1,7 +1,0 @@
-# Single-stage build for testing only
-
-FROM golang:1.10.3
-RUN mkdir -p /src/
-WORKDIR /src/
-COPY src/. .
-RUN go get -d -v
