@@ -9,27 +9,31 @@
 version: '3.5'
 
 services:
-  events-service:
+  party-service:
     restart: always
-    build: ./events-service/
+    build: ./party-service/
     ports:
       - "80:8080"
     networks:
       - frontend-tier
-      - events-data-tier
+      - party-data-tier
     environment:
-      - MONGO=mongodb://events-db:27017
+      - PORT=8080
+      - MONGO=mongodb://party-db:27017
+      - KAFKA_BROKERS=kafka:9092
     command: './app'
 
-  events-db:
+  party-db:
     image: mongo:3.3
-    container_name: events-db
+    container_name: party-db
     ports:
       - "27017:27017"
     volumes:
        - db-data:/data/db
     networks:
-      - events-data-tier
+      - party-data-tier
+
+  # Need to add Kafka here
 
 volumes:
   db-data:
@@ -37,6 +41,6 @@ volumes:
 networks:
   frontend-tier:
     driver: bridge
-  events-data-tier:
+  party-data-tier:
     driver: bridge
 

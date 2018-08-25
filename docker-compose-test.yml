@@ -9,35 +9,37 @@
 version: '3.5'
 
 services:
-  events-service:
+  party-service:
     build:
       dockerfile: Dockerfile.test
-      context: ./events-service/
-    container_name: events
+      context: ./party-service/
+    container_name: party
     restart: always
     volumes:
-#      - "/Users/eriksterneberg/workspace/go/src/github.com/eriksterneberg/go-demo-app/events-service/src:/go/src/github.com/eriksterneberg/go-demo-app/events-service/src"
-      - "./events-service/src:/go/src/github.com/eriksterneberg/go-demo-app/events-service/src"
-      - "./events-service/src/:/src"
+#      - "/Users/eriksterneberg/workspace/go/src/github.com/eriksterneberg/go-demo-app/party-service/src:/go/src/github.com/eriksterneberg/go-demo-app/party-service/src"
+      - "./party-service/src:/go/src/github.com/eriksterneberg/go-demo-app/party-service/src"
+      - "./party-service/src/:/src"
     ports:
       - "80:8080"
     networks:
       - frontend-tier
-      - events-data-tier
+      - party-data-tier
     environment:
-      - MONGO=mongodb://events-db:27017
+      - PORT=8080
+      - MONGO=mongodb://party-db:27017
+      - KAFKA_BROKERS=kafka:9092
 
-  events-db: # Don't use volume for db, then no need to tear down
+  party-db: # Don't use volume for db, then no need to tear down
     image: mongo:3.3
-    container_name: events-db
+    container_name: party-db
     ports:
       - "27017:27017"
     networks:
-      - events-data-tier
+      - party-data-tier
 
 networks:
   frontend-tier:
     driver: bridge
-  events-data-tier:
+  party-data-tier:
     driver: bridge
 
