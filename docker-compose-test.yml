@@ -13,8 +13,7 @@ services:
     build:
       dockerfile: Dockerfile.test
       context: ./party-service/
-    container_name: party
-    restart: always
+    container_name: party-service
     volumes:
 #      - "/Users/eriksterneberg/workspace/go/src/github.com/eriksterneberg/go-demo-app/party-service/src:/go/src/github.com/eriksterneberg/go-demo-app/party-service/src"
       - "./party-service/src:/go/src/github.com/eriksterneberg/go-demo-app/party-service/src"
@@ -24,10 +23,12 @@ services:
     networks:
       - frontend-tier
       - party-data-tier
+#    command: 'ping localhost'
+    command: './app'
     environment:
       - PORT=8080
       - MONGO=mongodb://party-db:27017
-      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_BROKERS=127.0.0.1:9092
 
   party-db: # Don't use volume for db, then no need to tear down
     image: mongo:3.3

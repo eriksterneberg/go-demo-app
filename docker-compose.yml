@@ -12,15 +12,19 @@ services:
   party-service:
     restart: always
     build: ./party-service/
+    container_name: party-service
     ports:
       - "80:8080"
     networks:
       - frontend-tier
       - party-data-tier
+      - event-log-tier
     environment:
       - PORT=8080
       - MONGO=mongodb://party-db:27017
-      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_BROKERS=127.0.0.1:9092
+    depends_on:
+      - kafka
     command: './app'
 
   party-db:
@@ -33,7 +37,23 @@ services:
     networks:
       - party-data-tier
 
-  # Need to add Kafka here
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    build: /Users/eriksterneberg/workspace/kafka-demo2/kafka-docker/
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - event-log-tier
 
 volumes:
   db-data:
@@ -42,5 +62,7 @@ networks:
   frontend-tier:
     driver: bridge
   party-data-tier:
+    driver: bridge
+  event-log-tier:
     driver: bridge
 

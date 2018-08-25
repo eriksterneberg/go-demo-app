@@ -1,8 +1,6 @@
 package main
 
 import (
-	"net/http"
-
 	"os"
 
 	"encoding/json"
@@ -14,6 +12,10 @@ import (
 	"strings"
 
 	"strconv"
+
+	"net/http"
+
+	"time"
 
 	broker2 "github.com/eriksterneberg/go-demo-app/event-log/src/broker"
 	"github.com/eriksterneberg/go-demo-app/party-service/src/logging"
@@ -89,6 +91,8 @@ func subscribe() {
 }
 
 func main() {
+	fmt.Println("Sleeping for 20 seconds before startup")
+	time.Sleep(time.Second * 20)
 	logging.Info("Starting to listen for events on the message broker")
 	go subscribe()
 
@@ -97,5 +101,6 @@ func main() {
 	defer fmt.Println("test, test")
 
 	logging.Info("Starting server at port", port)
-	logging.Log.Fatal(http.ListenAndServeTLS(":"+port, "cert.pem", "key.pem", router))
+	//logging.Log.Fatal(http.ListenAndServeTLS(":"+port, "cert.pem", "key.pem", router))
+	logging.Log.Fatal(http.ListenAndServe(":"+port, router))
 }

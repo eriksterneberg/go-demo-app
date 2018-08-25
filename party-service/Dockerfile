@@ -8,5 +8,5 @@ COPY src/. .
 RUN go get -d -v
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-FROM alpine:latest
-COPY --from=goimage /src/app ./
+#FROM alpine:latest
+#COPY --from=goimage /src/app ./
